@@ -1,19 +1,19 @@
 package com.youravgjoe.apps.menuplanner;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import java.lang.reflect.Array;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -26,13 +26,19 @@ public class DayViewActivity extends AppCompatActivity {
 
     ArrayAdapter<String> myAdapter;
 
-    List<String> sundayMeals = new ArrayList<>(Arrays.asList("Meal 1", "Meal 2", "Meal 3", "Meal 4"));
-    List<String> mondayMeals = new ArrayList<>(Arrays.asList("Meal 1", "Meal 2", "Meal 3", "Meal 4"));
-    List<String> tuesdayMeals = new ArrayList<>(Arrays.asList("Meal 1", "Meal 2", "Meal 3", "Meal 4"));
-    List<String> wednesdayMeals = new ArrayList<>(Arrays.asList("Meal 1", "Meal 2", "Meal 3", "Meal 4"));
-    List<String> thursdayMeals = new ArrayList<>(Arrays.asList("Meal 1", "Meal 2", "Meal 3", "Meal 4"));
-    List<String> fridayMeals = new ArrayList<>(Arrays.asList("Meal 1", "Meal 2", "Meal 3", "Meal 4"));
-    List<String> saturdayMeals = new ArrayList<>(Arrays.asList("Meal 1", "Meal 2", "Meal 3", "Meal 4"));
+    List<String> sundayMeals = new ArrayList<>(Arrays.asList("Sunday", "Meal 1", "Meal 2", "Meal 3", "Meal 4"));
+    List<String> mondayMeals = new ArrayList<>(Arrays.asList("Monday", "Meal 1", "Meal 2", "Meal 3", "Meal 4"));
+    List<String> tuesdayMeals = new ArrayList<>(Arrays.asList("Tuesday", "Meal 1", "Meal 2", "Meal 3", "Meal 4"));
+    List<String> wednesdayMeals = new ArrayList<>(Arrays.asList("Wednesday", "Meal 1", "Meal 2", "Meal 3", "Meal 4"));
+    List<String> thursdayMeals = new ArrayList<>(Arrays.asList("Thursday", "Meal 1", "Meal 2", "Meal 3", "Meal 4"));
+    List<String> fridayMeals = new ArrayList<>(Arrays.asList("Friday", "Meal 1", "Meal 2", "Meal 3", "Meal 4"));
+    List<String> saturdayMeals = new ArrayList<>(Arrays.asList("Saturday", "Meal 1", "Meal 2", "Meal 3", "Meal 4"));
+
+    List<List<String>> dayMealList = new ArrayList<>(Arrays.asList(sundayMeals, mondayMeals, tuesdayMeals, wednesdayMeals, thursdayMeals, fridayMeals, saturdayMeals));
+
+    public String[] dayFileNames = {"sunday.txt", "monday.txt", "tuesday.txt", "wednesday.txt", "thursday.txt", "friday.txt", "saturday.txt"};
+    final String meal = "meal";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,12 +57,9 @@ public class DayViewActivity extends AppCompatActivity {
 //                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
 //                        .setAction("Action", null).show();
 
-//                Toast.makeText(DayViewActivity.this, "Add a meal.", Toast.LENGTH_SHORT).show();
-
-                Integer position = 0;
+                int position = 0;
                 Bundle extras = getIntent().getExtras();
-                if(extras != null)
-                {
+                if (extras != null) {
                     position = extras.getInt("position");
                 }
 
@@ -66,61 +69,82 @@ public class DayViewActivity extends AppCompatActivity {
             }
         });
 
+        // This is for when we come back to this activity from MealActivity:
+        int position = 0;
+        String newMeal;
         Bundle extras = getIntent().getExtras();
-        if (extras != null) {
-            Integer day = extras.getInt("position");
-
-//            Toast.makeText(DayViewActivity.this, day.toString(), Toast.LENGTH_SHORT).show();
-
-
-            updateMealList(day);
+        if(extras != null)
+        {
+            position = extras.getInt("position");
+            if(extras.getString("meal") != null)
+            {
+                newMeal = extras.getString("meal");
+                dayMealList.get(position).add(newMeal); //add the new meal to the day's List of meals (this will probably be done with file input, not with an intent.
+            }
         }
+
+
+//        newMeal = fileIn(position, dayFileNames[position]);
+
+        /////////////////////////////////////////////////////////////////////
+        //this is where I'm at: Need to get File Input working, parsing out the Json file, and reading the json in until eof, or something.
+        /////////////////////////////////////////////////////////////////////
+
+        List<String> tempList = fileIn(position, dayFileNames[position]); //input the list of meals from the specified day file
+
+
+//        dayMealList.get(position).clear(); //clear the array, then fill it with the array read in from the file?
+        dayMealList.get(position).addAll(tempList);
+
+        populateMealList(position);
+
+//        dayMealList.get(position).add(dayMealList.size(), newMeal); //add the meal to the day's list of meals
     }
 
-    public void addMeal(int position)
+    @Override
+    public void onBackPressed() {
+        NavUtils.navigateUpFromSameTask(this); //this brings us back to the week view when back is pressed, instead of back to MealActivity
+        super.onBackPressed();
+    }
+
+
+
+    // Input from file using FileManager
+
+    public List<String> fileIn(int position, String filename)
     {
-        switch (position) {
-            case 0:
-                sundayMeals.add(sundayMeals.size(), "New meal");
-                myAdapter = new ArrayAdapter<>(this, R.layout.content_day_view, R.id.meals_textview, sundayMeals);
-                myListView.setAdapter(myAdapter);
-                break;
-            case 1:
-                sundayMeals.add(mondayMeals.size(), "New meal");
-                myAdapter = new ArrayAdapter<>(this, R.layout.content_day_view, R.id.meals_textview, mondayMeals);
-                myListView.setAdapter(myAdapter);
-                break;
-            case 2:
-                sundayMeals.add(tuesdayMeals.size(), "New meal");
-                myAdapter = new ArrayAdapter<>(this, R.layout.content_day_view, R.id.meals_textview, tuesdayMeals);
-                myListView.setAdapter(myAdapter);
-                break;
-            case 3:
-                sundayMeals.add(wednesdayMeals.size(), "New meal");
-                myAdapter = new ArrayAdapter<>(this, R.layout.content_day_view, R.id.meals_textview, wednesdayMeals);
-                myListView.setAdapter(myAdapter);
-                break;
-            case 4:
-                sundayMeals.add(thursdayMeals.size(), "New meal");
-                myAdapter = new ArrayAdapter<>(this, R.layout.content_day_view, R.id.meals_textview, thursdayMeals);
-                myListView.setAdapter(myAdapter);
-                break;
-            case 5:
-                sundayMeals.add(fridayMeals.size(), "New meal");
-                myAdapter = new ArrayAdapter<>(this, R.layout.content_day_view, R.id.meals_textview, fridayMeals);
-                myListView.setAdapter(myAdapter);
-                break;
-            case 6:
-                sundayMeals.add(saturdayMeals.size(), "New meal");
-                myAdapter = new ArrayAdapter<>(this, R.layout.content_day_view, R.id.meals_textview, saturdayMeals);
-                myListView.setAdapter(myAdapter);
-                break;
-            default:
-                break;
+        FileInputStream in;
+        try
+        {
+            in = this.openFileInput(filename);
+            return FileManager.inputFile(this, in, dayMealList.get(position)); // return the json list of values of the specified json name
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return new ArrayList<>(Arrays.asList("ERR")); //return an error statement.
         }
     }
 
-    public void updateMealList(int day)
+    // Output to file using FileManager (I'm actually doing this in MealActivity, not here. Same code.
+
+//    public void fileOut(String filename, String name, String value)
+//    {
+//        FileOutputStream out;
+//        try
+//        {
+//            out = openFileOutput(filename, Context.MODE_PRIVATE);
+//            FileManager.outputFile(out, name, value);
+//        }
+//        catch (Exception e)
+//        {
+//            e.printStackTrace();
+//        }
+//    }
+
+
+    // This is where we populate AND update the list of meals for the specified day.
+    public void populateMealList(int day)
     {
         switch (day)
         {

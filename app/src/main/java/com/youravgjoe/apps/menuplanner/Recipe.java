@@ -2,9 +2,6 @@ package com.youravgjoe.apps.menuplanner;
 
 import java.util.List;
 
-/**
- * Created by Joey on 10/10/15.
- */
 public class Recipe
 {
     List<Ingredient> ingredients;

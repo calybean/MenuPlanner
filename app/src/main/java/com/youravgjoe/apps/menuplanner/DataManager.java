@@ -4,9 +4,6 @@ import android.content.Context;
 
 import java.util.List;
 
-/**
- * Created by Joey on 10/10/15.
- */
 public class DataManager
 {
     static List<String> recipeList;
@@ -14,7 +11,7 @@ public class DataManager
 
     public static void Init()
     {
-        // Find all the reciepes and ingredients.
+        // Find all the recipes and ingredients.
     }
 
 }

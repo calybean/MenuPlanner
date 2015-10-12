@@ -1,24 +1,41 @@
 package com.youravgjoe.apps.menuplanner;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class MealActivity extends AppCompatActivity {
 
+    List<String> sundayMeals = new ArrayList<>(Arrays.asList("Meal 1", "Meal 2", "Meal 3", "Meal 4"));
+    List<String> mondayMeals = new ArrayList<>(Arrays.asList("Meal 1", "Meal 2", "Meal 3", "Meal 4"));
+    List<String> tuesdayMeals = new ArrayList<>(Arrays.asList("Meal 1", "Meal 2", "Meal 3", "Meal 4"));
+    List<String> wednesdayMeals = new ArrayList<>(Arrays.asList("Meal 1", "Meal 2", "Meal 3", "Meal 4"));
+    List<String> thursdayMeals = new ArrayList<>(Arrays.asList("Meal 1", "Meal 2", "Meal 3", "Meal 4"));
+    List<String> fridayMeals = new ArrayList<>(Arrays.asList("Meal 1", "Meal 2", "Meal 3", "Meal 4"));
+    List<String> saturdayMeals = new ArrayList<>(Arrays.asList("Meal 1", "Meal 2", "Meal 3", "Meal 4"));
+
+    List<List<String>> dayMealList = new ArrayList<>(Arrays.asList(sundayMeals, mondayMeals, tuesdayMeals, wednesdayMeals, thursdayMeals, fridayMeals, saturdayMeals));
+
     List<String> mealsList = new ArrayList<>(Arrays.asList("Meal 1", "Meal 2", "Meal 3", "Meal 4", "Meal 5", "Meal 6", "Meal 7", "Meal 8", "Meal 9", "Meal 10", "Meal 11", "Meal 12", "Meal 13", "Meal 14", "Meal 15"));
 
+    public String[] dayFileNames = {"sunday.txt", "monday.txt", "tuesday.txt", "wednesday.txt", "thursday.txt", "friday.txt", "saturday.txt"};
+
+
     ArrayAdapter<String> myAdapter;
-    ListView myListView;
+    ListView chooseMealListView;
 
 
     @Override
@@ -28,58 +45,52 @@ public class MealActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        myListView = (ListView) this.findViewById(R.id.choose_meal_listview);
+        chooseMealListView = (ListView) this.findViewById(R.id.choose_meal_listview);
+
+        //inflate the mealsList
+        myAdapter = new ArrayAdapter<>(this, R.layout.content_day_view, R.id.meals_textview, mealsList);
+        chooseMealListView.setAdapter(myAdapter);
 
 
-//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-//            }
-//        });
+        //mealsList itemClickListener
+        chooseMealListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View view, int mealPosition, long id) {
 
-        Integer position = 0;
-        Bundle extras = getIntent().getExtras();
-        if (extras != null)
+                int position = 0;
+                Bundle extras = getIntent().getExtras();
+                if (extras != null)
+                {
+                    position = extras.getInt("position");
+                }
+
+                //output stuff to a file here, using the day of week text file, meal as name, and whichever meal item they clicked on for the value
+                String outputString = fileOut(position, dayFileNames[position], "meal", mealsList);
+
+                //debug: I was only outputting the JSON so I could see what it actually looked like.
+//                Toast.makeText(getApplicationContext(), outputString, Toast.LENGTH_LONG).show();
+
+
+                Intent mealIntent = new Intent(MealActivity.this, DayViewActivity.class);
+                mealIntent.putExtra("position", position);
+                mealIntent.putExtra("meal", mealsList.get(mealPosition));
+                MealActivity.this.startActivity(mealIntent);
+            }
+        });
+    }
+
+    public String fileOut(int position, String filename, String name, List<String> values)
+    {
+        FileOutputStream out;
+        try
         {
-            position = extras.getInt("position");
+            out = openFileOutput(filename, Context.MODE_PRIVATE);
+//            String returnString = FileManager.outputFile(out, name, values);
+            return FileManager.outputFile(out, name, values);
         }
-
-        switch (position)
+        catch (Exception e)
         {
-            case 0:
-                myAdapter = new ArrayAdapter<>(this, R.layout.content_day_view, R.id.meals_textview, mealsList);
-                myListView.setAdapter(myAdapter);
-                //add meal to Sunday
-                break;
-            case 1:
-                myAdapter = new ArrayAdapter<>(this, R.layout.content_day_view, R.id.meals_textview, mealsList);
-                myListView.setAdapter(myAdapter);
-                break;
-            case 2:
-                myAdapter = new ArrayAdapter<>(this, R.layout.content_day_view, R.id.meals_textview, mealsList);
-                myListView.setAdapter(myAdapter);
-                break;
-            case 3:
-                myAdapter = new ArrayAdapter<>(this, R.layout.content_day_view, R.id.meals_textview, mealsList);
-                myListView.setAdapter(myAdapter);
-                break;
-            case 4:
-                myAdapter = new ArrayAdapter<>(this, R.layout.content_day_view, R.id.meals_textview, mealsList);
-                myListView.setAdapter(myAdapter);
-                break;
-            case 5:
-                myAdapter = new ArrayAdapter<>(this, R.layout.content_day_view, R.id.meals_textview, mealsList);
-                myListView.setAdapter(myAdapter);
-                break;
-            case 6:
-                myAdapter = new ArrayAdapter<>(this, R.layout.content_day_view, R.id.meals_textview, mealsList);
-                myListView.setAdapter(myAdapter);
-                break;
-            default:
-                break;
+            e.printStackTrace();
+            return "File Output Error!";
         }
     }
 
