@@ -15,7 +15,20 @@ import java.util.List;
 
 
 public class FileManager {
-    public static String outputFile(FileOutputStream out, String name, List<String> values)
+
+//    public static void outputFile(FileOutputStream out, String name, List<String> values)
+//    {
+//        HashSet<String> hashSet = new HashSet<>(values);
+//
+//        SharedPreferences sharedPreferences = getSharedPreferences("whatever_you_want_to_name_this", MODE_PRIVATE);
+//        SharedPreferences.Editor editor = sharedPreferences.edit();
+//        editor.putStringSet("name_of_the_preference_to_modify", hashSet);
+//        editor.apply();
+//
+//    }
+
+
+    public static String outputFile_(FileOutputStream out, String name, List<String> values)
     {
         String outputString = "";
         outputString += "\"meals\":[\n";
@@ -44,7 +57,7 @@ public class FileManager {
         return outputString; //debug only
     }
 
-    public static List<String> inputFile(Context context, FileInputStream in, List<String> names)
+    public static List<String> inputFile_(Context context, FileInputStream in, List<String> names)
     {
         InputStreamReader inReader = new InputStreamReader(in);
         BufferedReader bufferedReader = new BufferedReader(inReader);
@@ -70,7 +83,7 @@ public class FileManager {
 
             for (int i = 0; i < names.size(); i++)
             {
-                tempList.add(jobj.getString(names.get(i))); //this adds the JSON string stored at every index i in names.
+                tempList.add(jobj.getString(names.get(i))); //this should add the JSON string stored at every index i in names.
             }
 
             //debug:

@@ -1,7 +1,7 @@
 package com.youravgjoe.apps.menuplanner;
 
-import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -11,10 +11,10 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 public class MealActivity extends AppCompatActivity {
@@ -63,8 +63,9 @@ public class MealActivity extends AppCompatActivity {
                     position = extras.getInt("position");
                 }
 
+
                 //output stuff to a file here, using the day of week text file, meal as name, and whichever meal item they clicked on for the value
-                String outputString = fileOut(position, dayFileNames[position], "meal", mealsList);
+                fileOut("mealsList", mealsList);
 
                 //debug: I was only outputting the JSON so I could see what it actually looked like.
 //                Toast.makeText(getApplicationContext(), outputString, Toast.LENGTH_LONG).show();
@@ -78,20 +79,19 @@ public class MealActivity extends AppCompatActivity {
         });
     }
 
-    public String fileOut(int position, String filename, String name, List<String> values)
+    public void fileOut(String prefName, List<String> values)
     {
         FileOutputStream out;
-        try
-        {
-            out = openFileOutput(filename, Context.MODE_PRIVATE);
-//            String returnString = FileManager.outputFile(out, name, values);
-            return FileManager.outputFile(out, name, values);
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            return "File Output Error!";
-        }
-    }
 
+        Toast.makeText(this, "out: " + values.toString(), Toast.LENGTH_LONG).show();
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        HashSet<String> hashSet = new HashSet<>(values);
+
+        SharedPreferences sharedPreferences = getSharedPreferences(prefName, MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putStringSet(prefName, hashSet);
+        editor.apply();
+    }
 }

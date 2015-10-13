@@ -1,7 +1,7 @@
 package com.youravgjoe.apps.menuplanner;
 
-import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.NavUtils;
@@ -11,11 +11,12 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 public class DayViewActivity extends AppCompatActivity {
@@ -86,12 +87,9 @@ public class DayViewActivity extends AppCompatActivity {
 
 //        newMeal = fileIn(position, dayFileNames[position]);
 
-        /////////////////////////////////////////////////////////////////////
-        //this is where I'm at: Need to get File Input working, parsing out the Json file, and reading the json in until eof, or something.
-        /////////////////////////////////////////////////////////////////////
+        List<String> tempList = fileIn("mealsList"); //input the list of meals from the specified day file
 
-        List<String> tempList = fileIn(position, dayFileNames[position]); //input the list of meals from the specified day file
-
+        Toast.makeText(this, "in: " + tempList.toString(), Toast.LENGTH_LONG).show();
 
 //        dayMealList.get(position).clear(); //clear the array, then fill it with the array read in from the file?
         dayMealList.get(position).addAll(tempList);
@@ -107,23 +105,34 @@ public class DayViewActivity extends AppCompatActivity {
         super.onBackPressed();
     }
 
-
-
     // Input from file using FileManager
 
-    public List<String> fileIn(int position, String filename)
+    public List<String> fileIn(String prefName)
     {
         FileInputStream in;
-        try
-        {
-            in = this.openFileInput(filename);
-            return FileManager.inputFile(this, in, dayMealList.get(position)); // return the json list of values of the specified json name
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            return new ArrayList<>(Arrays.asList("ERR")); //return an error statement.
-        }
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        SharedPreferences sharedPreferences = getSharedPreferences(prefName, MODE_PRIVATE);
+        HashSet<String> hashSet = (HashSet<String>) sharedPreferences.getStringSet(prefName, new HashSet<String>());
+
+//        SharedPreferences prefs = getSharedPreferences("test", MODE_PRIVATE);
+//        LinkedHashSet<String> lhs = (LinkedHashSet<String>) prefs.getStringSet("test", new HashSet<String>());
+
+        return new ArrayList<>(hashSet);
+
+//        return new ArrayList<>(hashSet);
+
+//        try
+//        {
+//            in = this.openFileInput(filename);
+//            return FileManager.inputFile(this, in, dayMealList.get(position)); // return the json list of values of the specified json name
+//        }
+//        catch (Exception e)
+//        {
+//            e.printStackTrace();
+//            return new ArrayList<>(Arrays.asList("ERR")); //return an error statement.
+//        }
     }
 
     // Output to file using FileManager (I'm actually doing this in MealActivity, not here. Same code.
