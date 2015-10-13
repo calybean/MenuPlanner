@@ -48,6 +48,8 @@ public class DayViewActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true); //show back button in action bar
+
         dayActionBar = this.getSupportActionBar();
         myListView = (ListView) this.findViewById(R.id.meals_listview);
 
@@ -55,8 +57,6 @@ public class DayViewActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
 
                 int position = 0;
                 Bundle extras = getIntent().getExtras();
@@ -105,52 +105,15 @@ public class DayViewActivity extends AppCompatActivity {
         super.onBackPressed();
     }
 
-    // Input from file using FileManager
+    // Input from file using SharedPrefs
 
     public List<String> fileIn(String prefName)
     {
-        FileInputStream in;
-
-        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
         SharedPreferences sharedPreferences = getSharedPreferences(prefName, MODE_PRIVATE);
         HashSet<String> hashSet = (HashSet<String>) sharedPreferences.getStringSet(prefName, new HashSet<String>());
 
-//        SharedPreferences prefs = getSharedPreferences("test", MODE_PRIVATE);
-//        LinkedHashSet<String> lhs = (LinkedHashSet<String>) prefs.getStringSet("test", new HashSet<String>());
-
         return new ArrayList<>(hashSet);
-
-//        return new ArrayList<>(hashSet);
-
-//        try
-//        {
-//            in = this.openFileInput(filename);
-//            return FileManager.inputFile(this, in, dayMealList.get(position)); // return the json list of values of the specified json name
-//        }
-//        catch (Exception e)
-//        {
-//            e.printStackTrace();
-//            return new ArrayList<>(Arrays.asList("ERR")); //return an error statement.
-//        }
     }
-
-    // Output to file using FileManager (I'm actually doing this in MealActivity, not here. Same code.
-
-//    public void fileOut(String filename, String name, String value)
-//    {
-//        FileOutputStream out;
-//        try
-//        {
-//            out = openFileOutput(filename, Context.MODE_PRIVATE);
-//            FileManager.outputFile(out, name, value);
-//        }
-//        catch (Exception e)
-//        {
-//            e.printStackTrace();
-//        }
-//    }
-
 
     // This is where we populate AND update the list of meals for the specified day.
     public void populateMealList(int day)

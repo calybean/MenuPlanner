@@ -21,8 +21,9 @@
         <activity
             android:name=".DayViewActivity"
             android:label="@string/title_activity_day_view"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:parentActivityName=".MainActivity">
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar" >
+
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -31,7 +32,8 @@
         <activity
             android:name=".MealActivity"
             android:label="@string/title_activity_meal"
-            android:theme="@style/AppTheme.NoActionBar" >
+            android:theme="@style/AppTheme.NoActionBar"
+            android:parentActivityName=".DayViewActivity">
         </activity>
     </application>
 

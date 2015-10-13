@@ -10,8 +10,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
-
-import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -45,6 +43,8 @@ public class MealActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true); //show back button in action bar
+
         chooseMealListView = (ListView) this.findViewById(R.id.choose_meal_listview);
 
         //inflate the mealsList
@@ -64,12 +64,8 @@ public class MealActivity extends AppCompatActivity {
                 }
 
 
-                //output stuff to a file here, using the day of week text file, meal as name, and whichever meal item they clicked on for the value
+                //output stuff using SharedPrefs
                 fileOut("mealsList", mealsList);
-
-                //debug: I was only outputting the JSON so I could see what it actually looked like.
-//                Toast.makeText(getApplicationContext(), outputString, Toast.LENGTH_LONG).show();
-
 
                 Intent mealIntent = new Intent(MealActivity.this, DayViewActivity.class);
                 mealIntent.putExtra("position", position);
@@ -81,11 +77,7 @@ public class MealActivity extends AppCompatActivity {
 
     public void fileOut(String prefName, List<String> values)
     {
-        FileOutputStream out;
-
         Toast.makeText(this, "out: " + values.toString(), Toast.LENGTH_LONG).show();
-
-        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         HashSet<String> hashSet = new HashSet<>(values);
 

@@ -12,13 +12,37 @@
     <string name="action_settings">Settings</string>
 
     <string-array name="week">
-    <item>Sunday</item>
-    <item>Monday</item>
-    <item>Tuesday</item>
-    <item>Wednesday</item>
-    <item>Thursday</item>
-    <item>Friday</item>
-    <item>Saturday</item>
+        <item>Sunday</item>
+        <item>Monday</item>
+        <item>Tuesday</item>
+        <item>Wednesday</item>
+        <item>Thursday</item>
+        <item>Friday</item>
+        <item>Saturday</item>
+    </string-array>
+
+    <string-array name="inventory">
+        <item>Cheese</item>
+        <item>Milk</item>
+        <item>Bread</item>
+        <item>Eggs</item>
+        <item>Flour</item>
+        <item>Beans</item>
+        <item>Rice</item>
+        <item>Sugar</item>
+        <item>Apples</item>
+        <item>Popcorn</item>
+    </string-array>
+
+    <string-array name="shopping_list">
+        <item>Bacon</item>
+        <item>Orange Juice</item>
+        <item>Yogurt</item>
+        <item>Salt</item>
+        <item>Avocado</item>
+        <item>Tortilla Chips</item>
+        <item>Salsa</item>
+        <item>Lemon Juice</item>
     </string-array>
 
     <string name="sunday">Sunday</string>
@@ -31,4 +55,8 @@
 
     <string name="title_activity_day_view">DayViewActivity</string>
     <string name="title_activity_meal">MealActivity</string>
+    <string name="title_activity_inventory">Inventory</string>
+
+    <string name="yes_add">Yes, add all</string>
+    <string name="no_add">No, don\'t add</string>
 </resources>

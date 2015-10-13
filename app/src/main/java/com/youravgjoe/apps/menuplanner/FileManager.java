@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+// I'm not using FileManager anymore, because SharedPrefs is sooooo much easier.
+
 
 public class FileManager {
 
