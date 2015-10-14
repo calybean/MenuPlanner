@@ -1,6 +1,7 @@
 package com.youravgjoe.apps.menuplanner;
 
 import android.app.AlertDialog;
+import android.content.ClipData;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -32,6 +33,8 @@ public class MainActivity extends AppCompatActivity
     ListView inventory;
     ListView shoppingList;
     FloatingActionButton addToInventory;
+    boolean inventoryBool;
+    boolean shoppingListBool;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +43,18 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        //doesn't work. :(
+
+//        MenuItem weeklyMenuNav = (MenuItem) findViewById(R.id.nav_weekly_menu);
+//        MenuItem inventoryNav = (MenuItem) findViewById(R.id.nav_inventory);
+//        MenuItem shoppingListNav = (MenuItem) findViewById(R.id.nav_shopping_list);
+//
+//        Menu navMenu = (Menu) findViewById(R.id.nav);
+//
+//        navMenu.getItem(0).setChecked(true);
+
+        inventoryBool = false;
+        shoppingListBool = false;
 
         addToInventory = (FloatingActionButton) findViewById(R.id.addToInventory);
         addToInventory.setOnClickListener(new View.OnClickListener() {
@@ -100,8 +115,6 @@ public class MainActivity extends AppCompatActivity
         inventory.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                // Create an ArrayAdapter that will contain all list items
-
                 String[] inventoryArray = getResources().getStringArray(R.array.inventory);
 
                 Toast.makeText(getApplicationContext(), "You clicked on " + inventoryArray[position], Toast.LENGTH_SHORT).show();
@@ -125,10 +138,27 @@ public class MainActivity extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
+            if(inventoryBool || shoppingListBool)
+            {
+                //run all the code we run when weekly list is selected from pull out menu
+                inventoryBool = false;
+                shoppingListBool = false;
 
-            //I could use this back press to go from Inventory List and Shopping List to Weekly Menu.
+                // Handle the weekly menu action
+                actionBar.setTitle(R.string.menu);
 
-            super.onBackPressed();
+                //make this list visible, and all others gone
+                weekListView.setVisibility(View.VISIBLE);
+                inventory.setVisibility(View.GONE);
+                shoppingList.setVisibility(View.GONE);
+
+                //get rid of floating action button
+                addToInventory.setVisibility(View.GONE);
+            }
+            else
+            {
+                super.onBackPressed();
+            }
         }
     }
 
@@ -161,6 +191,9 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_weekly_menu) {
+            inventoryBool = false;
+            shoppingListBool = false;
+
             // Handle the weekly menu action
             actionBar.setTitle(R.string.menu);
 
@@ -172,7 +205,8 @@ public class MainActivity extends AppCompatActivity
             //get rid of floating action button
             addToInventory.setVisibility(View.GONE);
         } else if (id == R.id.nav_inventory) {
-            // Don't start new activity, just change this one.
+            inventoryBool = true;
+
             actionBar.setTitle(R.string.inventory);
 
             inventory.setVisibility(View.VISIBLE);
@@ -182,6 +216,8 @@ public class MainActivity extends AppCompatActivity
             addToInventory.setVisibility(View.GONE);
             //get rid of floating action button
         } else if (id == R.id.nav_shopping_list) {
+            shoppingListBool = true;
+
             actionBar.setTitle(R.string.shopping_list);
 
             shoppingList.setVisibility(View.VISIBLE);
@@ -190,11 +226,13 @@ public class MainActivity extends AppCompatActivity
 
             //add floating action button
             addToInventory.setVisibility(View.VISIBLE);
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
         }
+
+//        else if (id == R.id.nav_share) {
+//
+//        } else if (id == R.id.nav_send) {
+//
+//        }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

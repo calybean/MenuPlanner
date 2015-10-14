@@ -1,14 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/nav">
 
-    <group android:checkableBehavior="single">
-        <item android:id="@+id/nav_weekly_menu" android:icon="@android:drawable/ic_menu_my_calendar"
+    <group android:choiceMode="none">
+        <item android:id="@+id/nav_weekly_menu" android:icon="@drawable/ic_weekly_menu"
             android:title="@string/menu" />
-        <item android:id="@+id/nav_inventory" android:icon="@android:drawable/ic_menu_gallery"
+        <item android:id="@+id/nav_inventory" android:icon="@drawable/ic_inventory"
             android:title="@string/inventory" />
-        <item android:id="@+id/nav_shopping_list" android:icon="@android:drawable/ic_menu_agenda"
+        <item android:id="@+id/nav_shopping_list" android:icon="@drawable/ic_shopping_list"
             android:title="@string/shopping_list" />
     </group>
+
+    <!-- Switch out android:choiceMode="none" for android:checkableBehavior="single" -->
+
+    <!--
 
     <item android:title="Communicate">
         <menu>
@@ -18,5 +23,7 @@
                 android:title="Send" />
         </menu>
     </item>
+
+    -->
 
 </menu>

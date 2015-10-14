@@ -34,6 +34,11 @@
             android:label="@string/title_activity_meal"
             android:theme="@style/AppTheme.NoActionBar"
             android:parentActivityName=".DayViewActivity">
+
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".DayViewActivity" />
         </activity>
     </application>
 
