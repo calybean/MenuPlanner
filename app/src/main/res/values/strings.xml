@@ -54,7 +54,7 @@
     <string name="saturday">Saturday</string>
 
     <string name="title_activity_day_view">DayViewActivity</string>
-    <string name="title_activity_meal">MealActivity</string>
+    <string name="title_activity_meal">Meals</string>
     <string name="title_activity_inventory">Inventory</string>
 
     <string name="yes_add">Yes, add all</string>

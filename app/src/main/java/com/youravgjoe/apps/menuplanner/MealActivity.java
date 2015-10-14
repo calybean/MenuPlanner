@@ -17,24 +17,10 @@ import java.util.List;
 
 public class MealActivity extends AppCompatActivity {
 
-    List<String> sundayMeals = new ArrayList<>(Arrays.asList("Meal 1", "Meal 2", "Meal 3", "Meal 4"));
-    List<String> mondayMeals = new ArrayList<>(Arrays.asList("Meal 1", "Meal 2", "Meal 3", "Meal 4"));
-    List<String> tuesdayMeals = new ArrayList<>(Arrays.asList("Meal 1", "Meal 2", "Meal 3", "Meal 4"));
-    List<String> wednesdayMeals = new ArrayList<>(Arrays.asList("Meal 1", "Meal 2", "Meal 3", "Meal 4"));
-    List<String> thursdayMeals = new ArrayList<>(Arrays.asList("Meal 1", "Meal 2", "Meal 3", "Meal 4"));
-    List<String> fridayMeals = new ArrayList<>(Arrays.asList("Meal 1", "Meal 2", "Meal 3", "Meal 4"));
-    List<String> saturdayMeals = new ArrayList<>(Arrays.asList("Meal 1", "Meal 2", "Meal 3", "Meal 4"));
-
-    List<List<String>> dayMealList = new ArrayList<>(Arrays.asList(sundayMeals, mondayMeals, tuesdayMeals, wednesdayMeals, thursdayMeals, fridayMeals, saturdayMeals));
-
     List<String> mealsList = new ArrayList<>(Arrays.asList("Meal 1", "Meal 2", "Meal 3", "Meal 4", "Meal 5", "Meal 6", "Meal 7", "Meal 8", "Meal 9", "Meal 10", "Meal 11", "Meal 12", "Meal 13", "Meal 14", "Meal 15"));
-
-    public String[] dayFileNames = {"sunday.txt", "monday.txt", "tuesday.txt", "wednesday.txt", "thursday.txt", "friday.txt", "saturday.txt"};
-
 
     ArrayAdapter<String> myAdapter;
     ListView chooseMealListView;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,11 +37,9 @@ public class MealActivity extends AppCompatActivity {
         myAdapter = new ArrayAdapter<>(this, R.layout.content_day_view, R.id.meals_textview, mealsList);
         chooseMealListView.setAdapter(myAdapter);
 
-
         //mealsList itemClickListener
         chooseMealListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int mealPosition, long id) {
-
                 int position = 0;
                 Bundle extras = getIntent().getExtras();
                 if (extras != null)
@@ -63,9 +47,9 @@ public class MealActivity extends AppCompatActivity {
                     position = extras.getInt("position");
                 }
 
-
                 //output stuff using SharedPrefs
-                fileOut("mealsList", mealsList);
+//                fileOut(dayFileNames[position], dayMealList.get(position)); //use each day's pref name, and list of meals.
+//                dayMealList.get(position).add(mealsList.get(mealPosition)); //add the new meal to the list?
 
                 Intent mealIntent = new Intent(MealActivity.this, DayViewActivity.class);
                 mealIntent.putExtra("position", position);
@@ -77,7 +61,7 @@ public class MealActivity extends AppCompatActivity {
 
     public void fileOut(String prefName, List<String> values)
     {
-        Toast.makeText(this, "out: " + values.toString(), Toast.LENGTH_LONG).show();
+//        Toast.makeText(this, "out: " + values.toString(), Toast.LENGTH_LONG).show();
 
         HashSet<String> hashSet = new HashSet<>(values);
 

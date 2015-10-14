@@ -10,5 +10,7 @@
     <color name="colorPrimaryDark">#104978</color>
     <color name="colorAccent">#1768AC</color> <!--this is the same as colorPrimary-->
     <color name="colorAccentLight">#A6E1FA</color>
+    <color name="colorRed">#ff5252</color>
+    <color name="redHighlight">#FFCBCB</color>
 </resources>
 

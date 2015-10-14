@@ -125,6 +125,9 @@ public class MainActivity extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
+
+            //I could use this back press to go from Inventory List and Shopping List to Weekly Menu.
+
             super.onBackPressed();
         }
     }
