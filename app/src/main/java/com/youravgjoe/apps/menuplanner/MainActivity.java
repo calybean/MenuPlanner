@@ -1,7 +1,6 @@
 package com.youravgjoe.apps.menuplanner;
 
 import android.app.AlertDialog;
-import android.content.ClipData;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -19,19 +18,38 @@ import android.view.MenuItem;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
+import java.util.ArrayList;
+import java.util.List;
 
 //Example Toast:
 //Toast.makeText(getApplicationContext(), "", Toast.LENGTH_SHORT).show();
+
+//<string-array name="shopping_list">
+//        <item>Bacon</item>
+//        <item>Orange Juice</item>
+//        <item>Yogurt</item>
+//        <item>Salt</item>
+//        <item>Avocado</item>
+//        <item>Tortilla Chips</item>
+//        <item>Salsa</item>
+//        <item>Lemon Juice</item>
+
 
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    List<String> shoppingList = new ArrayList<>();
+    String[] testArray = {"Bacon", "Orange Juice", "Yogurt", "Avocado", "Tortilla Chips", "Salsa", "Lemon Juice"};
+
+    List<String> inventoryList = new ArrayList<>();
+    String[] testArray2 = {"Cheese", "Milk", "Bread", "Eggs", "Flour", "Beans", "Rice", "Sugar", "Apples", "Popcorn"};
+
     ActionBar actionBar;
 
     ListView weekListView;
-    ListView inventory;
-    ListView shoppingList;
+    ListView inventoryListView;
+    ListView shoppingListView;
     FloatingActionButton addToInventory;
     boolean inventoryBool;
     boolean shoppingListBool;
@@ -53,6 +71,13 @@ public class MainActivity extends AppCompatActivity
 //
 //        navMenu.getItem(0).setChecked(true);
 
+        //this will eventually be replaced with a read from file, not from the dummy array:
+        for(int i = 0; i < testArray.length; i++)
+        {
+            shoppingList.add(i, testArray[i]);
+        }
+
+        //start these out as false, because we're not in inventory or shopping list views.
         inventoryBool = false;
         shoppingListBool = false;
 
@@ -83,11 +108,11 @@ public class MainActivity extends AppCompatActivity
         actionBar.setTitle(R.string.menu); //Ignore warning. This doesn't produce java.lang.NullPointerException (yet?)
 
         weekListView = (ListView) this.findViewById(R.id.week_listview);
-        inventory = (ListView) this.findViewById(R.id.inventory_listview);
-        shoppingList = (ListView) this.findViewById(R.id.shopping_list);
+        inventoryListView = (ListView) this.findViewById(R.id.inventory_listview);
+        shoppingListView = (ListView) this.findViewById(R.id.shopping_list);
 
-        inventory.setVisibility(View.GONE);
-        shoppingList.setVisibility(View.GONE);
+        inventoryListView.setVisibility(View.GONE);
+        shoppingListView.setVisibility(View.GONE);
 
         //start with addToInventory fab not showing
         addToInventory.setVisibility(View.GONE);
@@ -112,7 +137,7 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        inventory.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        inventoryListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 String[] inventoryArray = getResources().getStringArray(R.array.inventory);
@@ -121,7 +146,7 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        shoppingList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        shoppingListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 String[] shoppingListArray = getResources().getStringArray(R.array.shopping_list);
@@ -149,8 +174,8 @@ public class MainActivity extends AppCompatActivity
 
                 //make this list visible, and all others gone
                 weekListView.setVisibility(View.VISIBLE);
-                inventory.setVisibility(View.GONE);
-                shoppingList.setVisibility(View.GONE);
+                inventoryListView.setVisibility(View.GONE);
+                shoppingListView.setVisibility(View.GONE);
 
                 //get rid of floating action button
                 addToInventory.setVisibility(View.GONE);
@@ -199,8 +224,8 @@ public class MainActivity extends AppCompatActivity
 
             //make this list visible, and all others gone
             weekListView.setVisibility(View.VISIBLE);
-            inventory.setVisibility(View.GONE);
-            shoppingList.setVisibility(View.GONE);
+            inventoryListView.setVisibility(View.GONE);
+            shoppingListView.setVisibility(View.GONE);
 
             //get rid of floating action button
             addToInventory.setVisibility(View.GONE);
@@ -209,9 +234,9 @@ public class MainActivity extends AppCompatActivity
 
             actionBar.setTitle(R.string.inventory);
 
-            inventory.setVisibility(View.VISIBLE);
+            inventoryListView.setVisibility(View.VISIBLE);
             weekListView.setVisibility(View.GONE);
-            shoppingList.setVisibility(View.GONE);
+            shoppingListView.setVisibility(View.GONE);
 
             addToInventory.setVisibility(View.GONE);
             //get rid of floating action button
@@ -220,8 +245,8 @@ public class MainActivity extends AppCompatActivity
 
             actionBar.setTitle(R.string.shopping_list);
 
-            shoppingList.setVisibility(View.VISIBLE);
-            inventory.setVisibility(View.GONE);
+            shoppingListView.setVisibility(View.VISIBLE);
+            inventoryListView.setVisibility(View.GONE);
             weekListView.setVisibility(View.GONE);
 
             //add floating action button
