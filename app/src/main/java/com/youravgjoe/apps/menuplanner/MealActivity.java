@@ -17,10 +17,18 @@ import java.util.List;
 
 public class MealActivity extends AppCompatActivity {
 
+
     List<String> mealsList = new ArrayList<>(Arrays.asList("Meal 1", "Meal 2", "Meal 3", "Meal 4", "Meal 5", "Meal 6", "Meal 7", "Meal 8", "Meal 9", "Meal 10", "Meal 11", "Meal 12", "Meal 13", "Meal 14", "Meal 15"));
+    List<String> breakfastList = new ArrayList<>(Arrays.asList("Breakfast 1", "Breakfast 2", "Breakfast 3", "Breakfast 4", "Breakfast 5", "Breakfast 6", "Breakfast 7", "Breakfast 8", "Breakfast 9", "Breakfast 10"));
+    List<String> lunchList = new ArrayList<>(Arrays.asList("Lunch 1", "Lunch 2", "Lunch 3", "Lunch 4", "Lunch 5", "Lunch 6", "Lunch 7", "Lunch 8", "Lunch 9", "Lunch 10"));
+    List<String> dinnerList = new ArrayList<>(Arrays.asList("Dinner 1", "Dinner 2", "Dinner 3", "Dinner 4", "Dinner 5", "Dinner 6", "Dinner 7", "Dinner 8", "Dinner 9", "Dinner 10"));
+
+    List<List<String>> mealListList = new ArrayList<>(Arrays.asList(breakfastList, lunchList, dinnerList, mealsList));
 
     ArrayAdapter<String> myAdapter;
     ListView chooseMealListView;
+
+    int meal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,13 +37,41 @@ public class MealActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+
+        Bundle extras = getIntent().getExtras();
+        if (extras != null)
+        {
+            meal = extras.getInt("meal"); //then depending on the meal, load a different list.
+        }
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true); //show back button in action bar
 
         chooseMealListView = (ListView) this.findViewById(R.id.choose_meal_listview);
 
-        //inflate the mealsList
-        myAdapter = new ArrayAdapter<>(this, R.layout.content_day_view, R.id.meals_textview, mealsList);
-        chooseMealListView.setAdapter(myAdapter);
+        if(meal == 0) //load bfast list
+        {
+            //inflate the mealsList
+            myAdapter = new ArrayAdapter<>(this, R.layout.content_day_view, R.id.meals_textview, breakfastList);
+            chooseMealListView.setAdapter(myAdapter);
+        }
+        else if(meal == 1)
+        {
+            //inflate the mealsList
+            myAdapter = new ArrayAdapter<>(this, R.layout.content_day_view, R.id.meals_textview, lunchList);
+            chooseMealListView.setAdapter(myAdapter);
+        }
+        else if(meal == 2)
+        {
+            //inflate the mealsList
+            myAdapter = new ArrayAdapter<>(this, R.layout.content_day_view, R.id.meals_textview, dinnerList);
+            chooseMealListView.setAdapter(myAdapter);
+        }
+        else
+        {
+            myAdapter = new ArrayAdapter<>(this, R.layout.content_day_view, R.id.meals_textview, mealsList);
+            chooseMealListView.setAdapter(myAdapter);
+        }
+
 
         //mealsList itemClickListener
         chooseMealListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -53,7 +89,7 @@ public class MealActivity extends AppCompatActivity {
 
                 Intent mealIntent = new Intent(MealActivity.this, DayViewActivity.class);
                 mealIntent.putExtra("position", position);
-                mealIntent.putExtra("meal", mealsList.get(mealPosition));
+                mealIntent.putExtra("meal", mealListList.get(meal).get(mealPosition));
                 MealActivity.this.startActivity(mealIntent);
             }
         });

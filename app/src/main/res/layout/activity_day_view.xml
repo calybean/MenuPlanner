@@ -17,9 +17,67 @@
 
     <include layout="@layout/content_day_view" />
 
-    <android.support.design.widget.FloatingActionButton android:id="@+id/fab"
-        android:layout_width="wrap_content" android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end" android:layout_margin="@dimen/fab_margin"
-        android:src="@drawable/ic_add" />
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:fab="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.getbase.floatingactionbutton.FloatingActionsMenu
+            android:id="@+id/fab_menu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/fab_margin"
+            fab:fab_addButtonColorNormal="@color/colorPrimary"
+            fab:fab_addButtonColorPressed="@color/colorPrimaryDark"
+            fab:fab_labelStyle="@style/menu_labels_style"
+            fab:fab_addButtonPlusIconColor="#FFF"
+            fab:fab_addButtonSize="normal"
+            fab:fab_labelsPosition="left"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true">
+
+            <com.getbase.floatingactionbutton.AddFloatingActionButton
+                android:id="@+id/fab_breakfast"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                fab:fab_colorNormal="@color/colorPrimaryLight"
+                fab:fab_colorPressed="@color/colorPrimary"
+                fab:fab_size="mini"
+                fab:fab_title="Breakfast"/>
+
+            <com.getbase.floatingactionbutton.AddFloatingActionButton
+                android:id="@+id/fab_lunch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                fab:fab_colorNormal="@color/colorPrimaryLight"
+                fab:fab_colorPressed="@color/colorPrimary"
+                fab:fab_size="mini"
+                fab:fab_title="Lunch"/>
+
+            <com.getbase.floatingactionbutton.AddFloatingActionButton
+                android:id="@+id/fab_dinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                fab:fab_colorNormal="@color/colorPrimaryLight"
+                fab:fab_colorPressed="@color/colorPrimary"
+                fab:fab_size="mini"
+                fab:fab_title="Dinner"/>
+
+        </com.getbase.floatingactionbutton.FloatingActionsMenu>
+
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_delete_meal"
+            fab:fab_colorNormal="@color/colorRed"
+            fab:fab_colorPressed="@color/colorRedDark"
+            fab:fab_icon="@drawable/ic_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/fab_margin"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"/>
+
+    </RelativeLayout>
 
 </android.support.design.widget.CoordinatorLayout>

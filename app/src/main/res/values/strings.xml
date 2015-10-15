@@ -59,4 +59,5 @@
 
     <string name="yes_add">Yes, add all</string>
     <string name="no_add">No, don\'t add</string>
+    <string name="title_activity_test_fab">testFabActivity</string>
 </resources>

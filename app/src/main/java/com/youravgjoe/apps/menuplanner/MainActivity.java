@@ -21,19 +21,9 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
+
 //Example Toast:
 //Toast.makeText(getApplicationContext(), "", Toast.LENGTH_SHORT).show();
-
-//<string-array name="shopping_list">
-//        <item>Bacon</item>
-//        <item>Orange Juice</item>
-//        <item>Yogurt</item>
-//        <item>Salt</item>
-//        <item>Avocado</item>
-//        <item>Tortilla Chips</item>
-//        <item>Salsa</item>
-//        <item>Lemon Juice</item>
-
 
 
 public class MainActivity extends AppCompatActivity
@@ -50,7 +40,7 @@ public class MainActivity extends AppCompatActivity
     ListView weekListView;
     ListView inventoryListView;
     ListView shoppingListView;
-    FloatingActionButton addToInventory;
+    FloatingActionButton addToInventoryFab;
     boolean inventoryBool;
     boolean shoppingListBool;
 
@@ -81,8 +71,8 @@ public class MainActivity extends AppCompatActivity
         inventoryBool = false;
         shoppingListBool = false;
 
-        addToInventory = (FloatingActionButton) findViewById(R.id.addToInventory);
-        addToInventory.setOnClickListener(new View.OnClickListener() {
+        addToInventoryFab = (FloatingActionButton) findViewById(R.id.addToInventory);
+        addToInventoryFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //show an alert dialog (Do you really want to add everything from list to inventory?)
@@ -115,7 +105,7 @@ public class MainActivity extends AppCompatActivity
         shoppingListView.setVisibility(View.GONE);
 
         //start with addToInventory fab not showing
-        addToInventory.setVisibility(View.GONE);
+        addToInventoryFab.hide();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -177,8 +167,8 @@ public class MainActivity extends AppCompatActivity
                 inventoryListView.setVisibility(View.GONE);
                 shoppingListView.setVisibility(View.GONE);
 
-                //get rid of floating action button
-                addToInventory.setVisibility(View.GONE);
+                //hide of floating action button
+                addToInventoryFab.hide();
             }
             else
             {
@@ -227,8 +217,8 @@ public class MainActivity extends AppCompatActivity
             inventoryListView.setVisibility(View.GONE);
             shoppingListView.setVisibility(View.GONE);
 
-            //get rid of floating action button
-            addToInventory.setVisibility(View.GONE);
+            //hide of floating action button
+            addToInventoryFab.hide();
         } else if (id == R.id.nav_inventory) {
             inventoryBool = true;
 
@@ -238,8 +228,7 @@ public class MainActivity extends AppCompatActivity
             weekListView.setVisibility(View.GONE);
             shoppingListView.setVisibility(View.GONE);
 
-            addToInventory.setVisibility(View.GONE);
-            //get rid of floating action button
+            addToInventoryFab.hide();
         } else if (id == R.id.nav_shopping_list) {
             shoppingListBool = true;
 
@@ -249,8 +238,8 @@ public class MainActivity extends AppCompatActivity
             inventoryListView.setVisibility(View.GONE);
             weekListView.setVisibility(View.GONE);
 
-            //add floating action button
-            addToInventory.setVisibility(View.VISIBLE);
+            //show floating action button
+            addToInventoryFab.show();
         }
 
 //        else if (id == R.id.nav_share) {

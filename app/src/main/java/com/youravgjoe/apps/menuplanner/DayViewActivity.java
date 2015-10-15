@@ -14,6 +14,10 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
+
+import com.getbase.floatingactionbutton.AddFloatingActionButton;
+import com.getbase.floatingactionbutton.FloatingActionsMenu;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -56,6 +60,13 @@ public class DayViewActivity extends AppCompatActivity {
     boolean add = true;
 
     FloatingActionButton fab;
+    FloatingActionsMenu fab_menu;
+    AddFloatingActionButton fab_bfast;
+    AddFloatingActionButton fab_lunch;
+    AddFloatingActionButton fab_dinner;
+    com.getbase.floatingactionbutton.FloatingActionButton fab_delete_meal;
+
+    int meal; // 0 = Breakfast, 1 = Lunch, 2 = Dinner
 
     private int position;
 
@@ -71,40 +82,73 @@ public class DayViewActivity extends AppCompatActivity {
         dayActionBar = this.getSupportActionBar();
         mealsListView = (ListView) this.findViewById(R.id.meals_listview);
 
-        //FAB onClick
+        fab_menu = (FloatingActionsMenu) findViewById(R.id.fab_menu);
 
-        fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        fab_bfast = (AddFloatingActionButton) findViewById(R.id.fab_breakfast);
+        fab_lunch = (AddFloatingActionButton) findViewById(R.id.fab_lunch);
+        fab_dinner = (AddFloatingActionButton) findViewById(R.id.fab_dinner);
+
+        fab_delete_meal = (com.getbase.floatingactionbutton.FloatingActionButton) findViewById(R.id.fab_delete_meal);
+
+        //delete button starts out invisible.
+        fab_delete_meal.setVisibility(View.GONE);
+
+        fab_delete_meal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //delete list item here
+                dayMealList.get(position).remove(mealToDelete);
+                fileOut(dayPrefNames[position], dayMealList.get(position)); //output the updated list to the day's shared pref
+                fileIn(dayPrefNames[position]);
+                populateMealList(position);
 
-                position = 0;
-                Bundle extras = getIntent().getExtras();
-                if (extras != null) {
-                    position = extras.getInt("position");
-                }
+                fab_delete_meal.setVisibility(View.GONE);
+                fab_menu.setVisibility(View.VISIBLE);
 
-                if(add)
-                {
-                    Intent mealIntent = new Intent(DayViewActivity.this, MealActivity.class);
-                    mealIntent.putExtra("position", position);
-                    DayViewActivity.this.startActivity(mealIntent);
-                }
-                else
-                {
-                    //delete list item here
-                    dayMealList.get(position).remove(mealToDelete);
-                    fileOut(dayPrefNames[position], dayMealList.get(position)); //output the updated list to the day's shared pref
-                    fileIn(dayPrefNames[position]);
-                    populateMealList(position);
+                add = true; //reset boolean
+            }
 
-                    fab.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorAccent)));
-                    fab.setImageResource(R.drawable.ic_add);
+        });
 
-                    add = true; //reset boolean
-                }
+        fab_bfast.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                meal = 0;
+                Toast.makeText(getApplicationContext(), "Add Breakfast", Toast.LENGTH_SHORT).show();
+
+                Intent mealIntent = new Intent(DayViewActivity.this, MealActivity.class);
+                mealIntent.putExtra("position", position);
+                mealIntent.putExtra("meal", meal);
+                DayViewActivity.this.startActivity(mealIntent);
             }
         });
+
+        fab_lunch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                meal = 1;
+                Toast.makeText(getApplicationContext(), "Add Lunch", Toast.LENGTH_SHORT).show();
+
+                Intent mealIntent = new Intent(DayViewActivity.this, MealActivity.class);
+                mealIntent.putExtra("position", position);
+                mealIntent.putExtra("meal", meal);
+                DayViewActivity.this.startActivity(mealIntent);
+            }
+        });
+
+        fab_dinner.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                meal = 2;
+                Toast.makeText(getApplicationContext(), "Add Dinner", Toast.LENGTH_SHORT).show();
+
+                Intent mealIntent = new Intent(DayViewActivity.this, MealActivity.class);
+                mealIntent.putExtra("position", position);
+                mealIntent.putExtra("meal", meal);
+                DayViewActivity.this.startActivity(mealIntent);
+            }
+        });
+
 
         //ListView Item onClick
 
@@ -136,8 +180,8 @@ public class DayViewActivity extends AppCompatActivity {
 
                     add = false; //fab is now a delete button, not an add button
 
-                    fab.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorRed)));
-                    fab.setImageResource(R.drawable.ic_delete);
+                    fab_menu.setVisibility(View.GONE);
+                    fab_delete_meal.setVisibility(View.VISIBLE);
                 }
                 return true;
             }
@@ -175,9 +219,9 @@ public class DayViewActivity extends AppCompatActivity {
         }
         else
         {
-            //reset the fab color and image
-            fab.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorPrimary)));
-            fab.setImageResource(R.drawable.ic_add);
+            fab_menu.setVisibility(View.VISIBLE);
+            fab_delete_meal.setVisibility(View.GONE);
+
             //unhighlight the selected list item
             populateMealList(position);
             //reset add bool

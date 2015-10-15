@@ -8,9 +8,14 @@
 
     <color name="colorPrimary">#1768AC</color>
     <color name="colorPrimaryDark">#104978</color>
+    <color name="colorPrimaryLight">#4586BD</color>
     <color name="colorAccent">#1768AC</color> <!--this is the same as colorPrimary-->
     <color name="colorAccentLight">#A6E1FA</color>
     <color name="colorRed">#ff5252</color>
+    <color name="colorRedDark">#CC4242</color>
     <color name="redHighlight">#FFCBCB</color>
+    <color name="black_semi_transparent">#B2000000</color>
+    <color name="white">#FFF</color>
+    <color name="colorPrimaryTransparent">#B21668AC</color>
 </resources>
 
