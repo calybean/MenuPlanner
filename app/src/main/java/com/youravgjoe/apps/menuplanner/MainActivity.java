@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -14,13 +13,16 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
+import com.getbase.floatingactionbutton.AddFloatingActionButton;
 import android.view.MenuItem;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
+
 import java.util.ArrayList;
 import java.util.List;
-
 
 //Example Toast:
 //Toast.makeText(getApplicationContext(), "", Toast.LENGTH_SHORT).show();
@@ -29,18 +31,22 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    ArrayAdapter<String> myAdapter;
+
     List<String> shoppingList = new ArrayList<>();
-    String[] testArray = {"Bacon", "Orange Juice", "Yogurt", "Avocado", "Tortilla Chips", "Salsa", "Lemon Juice"};
+    String[] testShoppingArray = {"Bacon", "Orange Juice", "Yogurt", "Avocado", "Tortilla Chips", "Salsa", "Lemon Juice"};
+    final String shoppingListPref = "shoppingList";
 
     List<String> inventoryList = new ArrayList<>();
-    String[] testArray2 = {"Cheese", "Milk", "Bread", "Eggs", "Flour", "Beans", "Rice", "Sugar", "Apples", "Popcorn"};
+    String[] testInventoryArray = {"Cheese", "Milk", "Bread", "Eggs", "Flour", "Beans", "Rice", "Sugar", "Apples", "Popcorn"};
+    final String   inventoryPref = "inventory";
 
     ActionBar actionBar;
 
     ListView weekListView;
     ListView inventoryListView;
     ListView shoppingListView;
-    FloatingActionButton addToInventoryFab;
+    AddFloatingActionButton addToInventoryFab;
     boolean inventoryBool;
     boolean shoppingListBool;
 
@@ -51,27 +57,22 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        //doesn't work. :(
-
-//        MenuItem weeklyMenuNav = (MenuItem) findViewById(R.id.nav_weekly_menu);
-//        MenuItem inventoryNav = (MenuItem) findViewById(R.id.nav_inventory);
-//        MenuItem shoppingListNav = (MenuItem) findViewById(R.id.nav_shopping_list);
-//
-//        Menu navMenu = (Menu) findViewById(R.id.nav);
-//
-//        navMenu.getItem(0).setChecked(true);
-
         //this will eventually be replaced with a read from file, not from the dummy array:
-        for(int i = 0; i < testArray.length; i++)
+        for(int i = 0; i < testShoppingArray.length; i++)
         {
-            shoppingList.add(i, testArray[i]);
+            shoppingList.add(i, testShoppingArray[i]);
+        }
+
+        for(int i = 0; i < testInventoryArray.length; i++)
+        {
+            inventoryList.add(i, testInventoryArray[i]);
         }
 
         //start these out as false, because we're not in inventory or shopping list views.
         inventoryBool = false;
         shoppingListBool = false;
 
-        addToInventoryFab = (FloatingActionButton) findViewById(R.id.addToInventory);
+        addToInventoryFab = (AddFloatingActionButton) findViewById(R.id.addToInventory);
         addToInventoryFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -105,7 +106,7 @@ public class MainActivity extends AppCompatActivity
         shoppingListView.setVisibility(View.GONE);
 
         //start with addToInventory fab not showing
-        addToInventoryFab.hide();
+        addToInventoryFab.setVisibility(View.GONE);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -118,7 +119,6 @@ public class MainActivity extends AppCompatActivity
 
         weekListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
                 //code to start DayViewActivity:
                 Intent dayIntent;
                 dayIntent = new Intent(MainActivity.this, DayViewActivity.class);
@@ -130,18 +130,14 @@ public class MainActivity extends AppCompatActivity
         inventoryListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                String[] inventoryArray = getResources().getStringArray(R.array.inventory);
-
-                Toast.makeText(getApplicationContext(), "You clicked on " + inventoryArray[position], Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "You clicked on " + testInventoryArray[position], Toast.LENGTH_SHORT).show();
             }
         });
 
         shoppingListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                String[] shoppingListArray = getResources().getStringArray(R.array.shopping_list);
-
-                Toast.makeText(getApplicationContext(), "You clicked on " + shoppingListArray[position], Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "You clicked on " + testShoppingArray[position], Toast.LENGTH_SHORT).show();
 
             }
         });
@@ -168,7 +164,7 @@ public class MainActivity extends AppCompatActivity
                 shoppingListView.setVisibility(View.GONE);
 
                 //hide of floating action button
-                addToInventoryFab.hide();
+                addToInventoryFab.setVisibility(View.GONE);
             }
             else
             {
@@ -218,7 +214,7 @@ public class MainActivity extends AppCompatActivity
             shoppingListView.setVisibility(View.GONE);
 
             //hide of floating action button
-            addToInventoryFab.hide();
+            addToInventoryFab.setVisibility(View.GONE);
         } else if (id == R.id.nav_inventory) {
             inventoryBool = true;
 
@@ -228,7 +224,10 @@ public class MainActivity extends AppCompatActivity
             weekListView.setVisibility(View.GONE);
             shoppingListView.setVisibility(View.GONE);
 
-            addToInventoryFab.hide();
+            addToInventoryFab.setVisibility(View.GONE);
+
+            myAdapter = new ArrayAdapter<>(this, R.layout.content_day_view, R.id.meals_textview, testInventoryArray);
+            inventoryListView.setAdapter(myAdapter);
         } else if (id == R.id.nav_shopping_list) {
             shoppingListBool = true;
 
@@ -239,7 +238,11 @@ public class MainActivity extends AppCompatActivity
             weekListView.setVisibility(View.GONE);
 
             //show floating action button
-            addToInventoryFab.show();
+            addToInventoryFab.setVisibility(View.VISIBLE);
+
+            myAdapter = new ArrayAdapter<>(this, R.layout.content_day_view, R.id.meals_textview, testShoppingArray);
+            shoppingListView.setAdapter(myAdapter);
+
         }
 
 //        else if (id == R.id.nav_share) {
