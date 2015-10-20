@@ -155,7 +155,6 @@ public class DayViewActivity extends AppCompatActivity {
             }
         });
 
-        // This is for when we come to this activity from MealActivity:
         String newMeal;
         Bundle extras = getIntent().getExtras();
         if(extras != null)

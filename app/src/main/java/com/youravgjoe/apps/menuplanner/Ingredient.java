@@ -6,7 +6,7 @@ public class Ingredient
 {
     Context context;
     public String name;
-    public Double cost;
+    public Double cost; //why do we need the cost? Just to estimate how much a recipe will cost to make?
 
     public Double quantity;
 

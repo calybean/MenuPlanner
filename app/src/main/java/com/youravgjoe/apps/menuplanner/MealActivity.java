@@ -17,13 +17,11 @@ import java.util.List;
 
 public class MealActivity extends AppCompatActivity {
 
-
-    List<String> mealsList = new ArrayList<>(Arrays.asList("Meal 1", "Meal 2", "Meal 3", "Meal 4", "Meal 5", "Meal 6", "Meal 7", "Meal 8", "Meal 9", "Meal 10", "Meal 11", "Meal 12", "Meal 13", "Meal 14", "Meal 15"));
     List<String> breakfastList = new ArrayList<>(Arrays.asList("Breakfast 1", "Breakfast 2", "Breakfast 3", "Breakfast 4", "Breakfast 5", "Breakfast 6", "Breakfast 7", "Breakfast 8", "Breakfast 9", "Breakfast 10"));
     List<String> lunchList = new ArrayList<>(Arrays.asList("Lunch 1", "Lunch 2", "Lunch 3", "Lunch 4", "Lunch 5", "Lunch 6", "Lunch 7", "Lunch 8", "Lunch 9", "Lunch 10"));
     List<String> dinnerList = new ArrayList<>(Arrays.asList("Dinner 1", "Dinner 2", "Dinner 3", "Dinner 4", "Dinner 5", "Dinner 6", "Dinner 7", "Dinner 8", "Dinner 9", "Dinner 10"));
 
-    List<List<String>> mealListList = new ArrayList<>(Arrays.asList(breakfastList, lunchList, dinnerList, mealsList));
+    List<List<String>> mealListList = new ArrayList<>(Arrays.asList(breakfastList, lunchList, dinnerList));
 
     ArrayAdapter<String> myAdapter;
     ListView chooseMealListView;
@@ -68,10 +66,8 @@ public class MealActivity extends AppCompatActivity {
         }
         else
         {
-            myAdapter = new ArrayAdapter<>(this, R.layout.content_day_view, R.id.meals_textview, mealsList);
-            chooseMealListView.setAdapter(myAdapter);
+            Toast.makeText(this, "Could not inflate list of meals", Toast.LENGTH_SHORT).show();
         }
-
 
         //mealsList itemClickListener
         chooseMealListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -83,10 +79,6 @@ public class MealActivity extends AppCompatActivity {
                     position = extras.getInt("position");
                 }
 
-                //output stuff using SharedPrefs
-//                fileOut(dayFileNames[position], dayMealList.get(position)); //use each day's pref name, and list of meals.
-//                dayMealList.get(position).add(mealsList.get(mealPosition)); //add the new meal to the list?
-
                 Intent mealIntent = new Intent(MealActivity.this, DayViewActivity.class);
                 mealIntent.putExtra("position", position);
                 mealIntent.putExtra("meal", mealListList.get(meal).get(mealPosition));
@@ -95,6 +87,8 @@ public class MealActivity extends AppCompatActivity {
         });
     }
 
+
+    //fileOut not used here. Only in DayViewActivity.
     public void fileOut(String prefName, List<String> values)
     {
 //        Toast.makeText(this, "out: " + values.toString(), Toast.LENGTH_LONG).show();
