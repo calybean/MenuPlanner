@@ -2,12 +2,12 @@ package com.youravgjoe.apps.menuplanner;
 
 import java.util.List;
 
-public class Recipe
+public class Meal
 {
     List<Ingredient> ingredients;
     String directions;
 
-    public Recipe(String filePath)
+    public Meal(String filePath)
     {
         //read ingredients in from file.
     }
