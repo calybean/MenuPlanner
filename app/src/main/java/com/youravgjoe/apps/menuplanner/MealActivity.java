@@ -17,9 +17,9 @@ import java.util.List;
 
 public class MealActivity extends AppCompatActivity {
 
-    List<String> breakfastList = new ArrayList<>(Arrays.asList("Breakfast 1", "Breakfast 2", "Breakfast 3", "Breakfast 4", "Breakfast 5", "Breakfast 6", "Breakfast 7", "Breakfast 8", "Breakfast 9", "Breakfast 10"));
-    List<String> lunchList = new ArrayList<>(Arrays.asList("Lunch 1", "Lunch 2", "Lunch 3", "Lunch 4", "Lunch 5", "Lunch 6", "Lunch 7", "Lunch 8", "Lunch 9", "Lunch 10"));
-    List<String> dinnerList = new ArrayList<>(Arrays.asList("Dinner 1", "Dinner 2", "Dinner 3", "Dinner 4", "Dinner 5", "Dinner 6", "Dinner 7", "Dinner 8", "Dinner 9", "Dinner 10"));
+    List<String> breakfastList = DataManager.getBreakfastMealNames();
+    List<String> lunchList = DataManager.getLunchMealNames();
+    List<String> dinnerList = DataManager.getDinnerMealNames();
 
     List<List<String>> mealListList = new ArrayList<>(Arrays.asList(breakfastList, lunchList, dinnerList));
 
@@ -86,7 +86,6 @@ public class MealActivity extends AppCompatActivity {
             }
         });
     }
-
 
     //fileOut not used here. Only in DayViewActivity.
     public void fileOut(String prefName, List<String> values)

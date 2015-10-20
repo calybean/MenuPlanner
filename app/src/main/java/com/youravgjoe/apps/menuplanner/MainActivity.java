@@ -56,6 +56,8 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        DataManager.Init(this);
+
         //this will eventually be replaced with a read from file, not from the dummy array:
         for(int i = 0; i < testShoppingArray.length; i++)
         {

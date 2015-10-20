@@ -1,22 +1,43 @@
 package com.youravgjoe.apps.menuplanner;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.List;
 
 public class Meal
 {
-    String meal; //this will be either Breakfast, Lunch, or Dinner, and will be used to sort meals in DayViewActivity
-    String name; //sort meals alphabetically in the list of meals?
+    public enum mealType {breakfast, lunch, dinner;}
+
+    String name;
     List<Ingredient> ingredients;
     String directions;
+    mealType type;
 
     public Meal(String filePath)
     {
         //read ingredients in from file.
     }
 
-    public void Save(String filePath)
+    public void SaveToFile()
     {
-
+        try
+        {
+            File file = new File(DataManager.mealFilePath + name);
+            FileWriter writer = new FileWriter(file);
+            writer.write(name);
+            writer.write(type.toString());
+            for (int i = 0; i < ingredients.size(); i++)
+            {
+                //writer.write(ingredients.SaveToFile()); under construction
+            }
+            writer.close();
+        }
+        catch(IOException e)
+        {
+            DataManager.printExceptionMessage(e);
+        }
     }
 
     public Double GetCost()
@@ -28,4 +49,6 @@ public class Meal
         }
         return cost;
     }
+
+
 }
