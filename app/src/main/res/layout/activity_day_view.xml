@@ -70,7 +70,7 @@
             android:id="@+id/fab_delete_meal"
             fab:fab_colorNormal="@color/colorRed"
             fab:fab_colorPressed="@color/colorRedDark"
-            fab:fab_icon="@drawable/ic_delete"
+            fab:fab_icon="@drawable/ic_delete_white_24dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/fab_margin"

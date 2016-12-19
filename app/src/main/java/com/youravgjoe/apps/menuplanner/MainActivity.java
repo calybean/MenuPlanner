@@ -23,10 +23,6 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
-//Example Toast:
-//Toast.makeText(getApplicationContext(), "", Toast.LENGTH_SHORT).show();
-
-
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -91,7 +87,7 @@ public class MainActivity extends AppCompatActivity
                                 // do nothing
                             }
                         })
-                        .setIcon(android.R.drawable.ic_menu_add)
+                        .setIcon(R.drawable.ic_add_white_24dp)
                         .show();
             }
         });
@@ -246,13 +242,6 @@ public class MainActivity extends AppCompatActivity
             shoppingListView.setAdapter(myAdapter);
 
         }
-
-//        else if (id == R.id.nav_share) {
-//
-//        } else if (id == R.id.nav_send) {
-//
-//        }
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
