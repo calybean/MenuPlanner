@@ -11,6 +11,9 @@
 
     <string name="action_settings">Settings</string>
 
+    <string name="api_key">so0w05OaB4dsAPwisOhGBcXnY648Lo0k</string>
+    <string name="api_secret">qvCSCocu6gVVUTfy</string>
+
     <string-array name="week">
         <item>Sunday</item>
         <item>Monday</item>

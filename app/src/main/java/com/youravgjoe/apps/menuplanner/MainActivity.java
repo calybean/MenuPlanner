@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -26,15 +27,13 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    ArrayAdapter<String> myAdapter;
-
     List<String> shoppingList = new ArrayList<>();
     String[] testShoppingArray = {"Bacon", "Orange Juice", "Yogurt", "Avocado", "Tortilla Chips", "Salsa", "Lemon Juice"};
     final String shoppingListPref = "shoppingList";
 
     List<String> inventoryList = new ArrayList<>();
     String[] testInventoryArray = {"Cheese", "Milk", "Bread", "Eggs", "Flour", "Beans", "Rice", "Sugar", "Apples", "Popcorn"};
-    final String   inventoryPref = "inventory";
+    final String inventoryPref = "inventory";
 
     ActionBar actionBar;
 
@@ -44,6 +43,9 @@ public class MainActivity extends AppCompatActivity
     AddFloatingActionButton addToInventoryFab;
     boolean inventoryBool;
     boolean shoppingListBool;
+
+    ArrayAdapter<String> mInventoryAdapter;
+    ArrayAdapter<String> mShoppingListAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,45 +57,19 @@ public class MainActivity extends AppCompatActivity
         DataManager.Init(this);
 
         //this will eventually be replaced with a read from file, not from the dummy array:
-        for(int i = 0; i < testShoppingArray.length; i++)
-        {
+        for(int i = 0; i < testShoppingArray.length; i++) {
             shoppingList.add(i, testShoppingArray[i]);
         }
 
-        for(int i = 0; i < testInventoryArray.length; i++)
-        {
+        for(int i = 0; i < testInventoryArray.length; i++) {
             inventoryList.add(i, testInventoryArray[i]);
         }
 
         //start these out as false, because we're not in inventory or shopping list views.
         inventoryBool = false;
         shoppingListBool = false;
-
-        addToInventoryFab = (AddFloatingActionButton) findViewById(R.id.addToInventory);
-        addToInventoryFab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //show an alert dialog (Do you really want to add everything from list to inventory?)
-                new AlertDialog.Builder(MainActivity.this)
-                        .setTitle("Add all?")
-                        .setMessage("Are you sure you'd like to add everything from your shopping list to your inventory?")
-                        .setPositiveButton(R.string.yes_add, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                //this is where we add all to inventory
-                            }
-                        })
-                        .setNegativeButton(R.string.no_add, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                // do nothing
-                            }
-                        })
-                        .setIcon(R.drawable.ic_add_white_24dp)
-                        .show();
-            }
-        });
-
         actionBar = this.getSupportActionBar();
-        actionBar.setTitle(R.string.menu); //Ignore warning. This doesn't produce java.lang.NullPointerException (yet?)
+        actionBar.setTitle(R.string.menu);
 
         weekListView = (ListView) this.findViewById(R.id.week_listview);
         inventoryListView = (ListView) this.findViewById(R.id.inventory_listview);
@@ -102,8 +78,11 @@ public class MainActivity extends AppCompatActivity
         inventoryListView.setVisibility(View.GONE);
         shoppingListView.setVisibility(View.GONE);
 
-        //start with addToInventory fab not showing
-        addToInventoryFab.setVisibility(View.GONE);
+        mInventoryAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, android.R.id.text1, inventoryList);
+        inventoryListView.setAdapter(mInventoryAdapter);
+
+        mShoppingListAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, android.R.id.text1, shoppingList);
+        shoppingListView.setAdapter(mShoppingListAdapter);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -126,18 +105,47 @@ public class MainActivity extends AppCompatActivity
 
         inventoryListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                Toast.makeText(getApplicationContext(), "You clicked on " + testInventoryArray[position], Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getApplicationContext(), "You clicked on " + inventoryList.get(position), Toast.LENGTH_SHORT).show();
             }
         });
 
         shoppingListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                Toast.makeText(getApplicationContext(), "You clicked on " + testShoppingArray[position], Toast.LENGTH_SHORT).show();
-
+//                Toast.makeText(getApplicationContext(), "You clicked on " + shoppingList.get(position), Toast.LENGTH_SHORT).show();
             }
         });
+
+        addToInventoryFab = (AddFloatingActionButton) findViewById(R.id.addToInventory);
+        addToInventoryFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //show an alert dialog (Do you really want to add everything from list to inventory?)
+                new AlertDialog.Builder(MainActivity.this)
+                        .setTitle("Add all?")
+                        .setMessage("Are you sure you'd like to add everything from your shopping list to your inventory?")
+                        .setPositiveButton(R.string.yes_add, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                //this is where we add all to inventory
+
+                                inventoryList.addAll(shoppingList);
+                                shoppingList.clear();
+
+                                mInventoryAdapter.notifyDataSetChanged();
+                                mShoppingListAdapter.notifyDataSetChanged();
+                            }
+                        })
+                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // do nothing
+                            }
+                        })
+                        .setIcon(R.drawable.ic_add_black_24dp)
+                        .show();
+            }
+        });
+
+        //start with addToInventory fab not showing
+        addToInventoryFab.setVisibility(View.GONE);
     }
 
     @Override
@@ -170,28 +178,28 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            Toast.makeText(this, "No settings yet", Toast.LENGTH_SHORT).show();
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        // Inflate the menu; this adds items to the action bar if it is present.
+//        getMenuInflater().inflate(R.menu.main, menu);
+//        return true;
+//    }
+//
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        // Handle action bar item clicks here. The action bar will
+//        // automatically handle clicks on the Home/Up button, so long
+//        // as you specify a parent activity in AndroidManifest.xml.
+//        int id = item.getItemId();
+//
+//        //noinspection SimplifiableIfStatement
+//        if (id == R.id.action_settings) {
+//            Toast.makeText(this, "No settings yet", Toast.LENGTH_SHORT).show();
+//            return true;
+//        }
+//
+//        return super.onOptionsItemSelected(item);
+//    }
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
@@ -223,9 +231,6 @@ public class MainActivity extends AppCompatActivity
             shoppingListView.setVisibility(View.GONE);
 
             addToInventoryFab.setVisibility(View.GONE);
-
-            myAdapter = new ArrayAdapter<>(this, R.layout.content_day_view, R.id.meals_textview, testInventoryArray);
-            inventoryListView.setAdapter(myAdapter);
         } else if (id == R.id.nav_shopping_list) {
             shoppingListBool = true;
 
@@ -237,10 +242,6 @@ public class MainActivity extends AppCompatActivity
 
             //show floating action button
             addToInventoryFab.setVisibility(View.VISIBLE);
-
-            myAdapter = new ArrayAdapter<>(this, R.layout.content_day_view, R.id.meals_textview, testShoppingArray);
-            shoppingListView.setAdapter(myAdapter);
-
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
